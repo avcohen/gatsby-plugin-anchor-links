@@ -4,7 +4,7 @@ import { Link } from "gatsby";
 import {
   handleLinkClick,
   stripHashedLocation,
-  handleStrippedLinkClick
+  handleStrippedLinkClick,
 } from "../utils";
 import { anchorLinkTypes } from "../types";
 
@@ -13,12 +13,13 @@ export function AnchorLink({
   title,
   children,
   className,
-  stripHash = false
+  stripHash = false,
+  ...rest
 }) {
   const linkProps = {
     to: stripHash ? stripHashedLocation(to) : to,
-    onClick: e =>
-      stripHash ? handleStrippedLinkClick(to, e) : handleLinkClick(to, e)
+    onClick: (e) =>
+      stripHash ? handleStrippedLinkClick(to, e) : handleLinkClick(to, e),
   };
 
   /**
@@ -27,7 +28,11 @@ export function AnchorLink({
   if (title) linkProps.title = title;
   if (className) linkProps.className = className;
 
-  return <Link {...linkProps}>{Boolean(children) ? children : title}</Link>;
+  return (
+    <Link {...linkProps} {...rest}>
+      {Boolean(children) ? children : title}
+    </Link>
+  );
 }
 
 AnchorLink.propTypes = anchorLinkTypes;
